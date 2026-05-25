@@ -1,34 +1,92 @@
-# Proiect: Analiza Churn la Orange Telecom
+# Orange Telecom Churn Analysis — Project Overview
 
-**Autor:** Cruceanu Nichita  
-**Grupa:** 1098  
-**Disciplina:** Pachete Software  
+**Author:** Cruceanu Nichita
 
-## Descrierea Proiectului
-Acest proiect analizează rata de reziliere a contractelor (churn) pentru clienții Orange Telecom, utilizând un set de date real. Obiectivul economic este identificarea factorilor de risc și a profilelor de clienți predispuși să renunțe la serviciile companiei.
+This repository contains two independent applications built on the same dataset: a **Streamlit web application** for interactive data exploration and a **SAS program** with analytical exercises. Both use the *Orange Telecom Customer Churn* dataset.
 
-Proiectul este structurat în două componente majore, conform cerințelor de la seminar, atingând punctajul maxim pentru funcționalități:
-1. **O aplicație web interactivă multi-pagină** dezvoltată în Python (Streamlit).
-2. **Un script de analiză statistică și raportare** dezvoltat în SAS.
+---
 
-## Facilități Implementate (Python & SAS)
+## Dataset
 
-### Modulul Python
-Aplicația Streamlit acoperă 11/11 facilități, dintre care:
-* Dezvoltare multi-pagină și widget-uri pentru filtrare.
-* Import și procesare avansată cu `pandas` (folosind `index_col=0` la citirea fișierelor CSV și păstrând convenția `_df` pentru seturile de date).
-* Analiză cu `scikit-learn` (Clusterizare K-Means pentru clienți) și `statsmodels`.
-* Vizualizări grafice complexe utilizând Plotly, Seaborn și Matplotlib.
+| Field | Details |
+|---|---|
+| **Dataset Name** | Orange Telecom Customer Churn |
+| **Dataset Owner** | Orange S.A. |
+| **Platform** | Kaggle / BigML |
+| **Primary Sources** | Real anonymized telecom industry data |
+| **Nature** | Historical customer data used for retention strategies |
 
-### Modulul SAS
-Codul SAS integrează 10/10 facilități cerute:
-1. **Importul** și **concatenarea** datelor externe din CSV.
-2. Procesare iterativă utilizând **funcții** și **masive** (`DO`, `ARRAY`, `SUM`, `ROUND`).
-3. Crearea de **formate definite de utilizator** (ex. mapare binară pentru ratele de churn).
-4. Proceduri specifice **SQL** pentru agregare și combinarea seturilor.
-5. Analiză statistică detaliată (`PROC MEANS`) și **Modelare Logistică** (`PROC LOGISTIC`) pentru predicția probabilității de părăsire a rețelei.
-6. Generarea de rapoarte și grafice cu `PROC REPORT` și `PROC SGPLOT`.
+### Key Columns
 
-## Rularea Proiectului
-1. **Python:** Din terminal, în directorul aferent fișierelor python, executați comanda: `streamlit run Home.py`.
-2. **SAS:** Se încarcă fișierul `.sas` în SAS Studio OnDemand împreună cu seturile de date aferente. Este necesară validarea/actualizarea căilor către fișiere (`FILENAME REF80` și `REF20`) conform locației specifice mediului de rulare de pe server.
+| Column | Description |
+|---|---|
+| `State` | Geographic location of the customer (US State) |
+| `Account length` | Number of days the account has been active |
+| `International plan` | Binary indicator: Yes/No |
+| `Voice mail plan` | Binary indicator: Yes/No |
+| `Total * minutes/calls/charge` | Aggregated usage metrics for day, evening, night, and international |
+| `Customer service calls` | Number of calls made to support (High risk indicator) |
+| `Churn` | Binary flag: True = Customer left, False = Customer retained |
+
+---
+
+## Application 1 — Streamlit Web App
+
+### Overview
+
+An interactive multi-page web application built with Python and Streamlit. It allows users to explore the telecom dataset through dynamic visualizations, filtering, customer clustering, and machine learning models for churn prediction. In writing the code, standard best practices were followed, including using `index_col=0` when reading the datasets and standardizing all DataFrame variables with the `_df` suffix.
+
+### Project Structure
+
+```
+Orange_Telecom_Churn_Project/
+├── Home.py                                   # Entry point — overview, company context
+├── 1_📥_Importul_Datelor.py                  # Data loading, missing values, encoding
+├── 2_🔍_Analiza_Exploratorie.py              # Filtering, loc/iloc, pandas groupby operations
+├── 3_📊_Vizualizari.py                       # Interactive charts (matplotlib, seaborn, plotly)
+├── 4_👥_Clusterizare.py                      # K-Means customer segmentation
+├── 5_📉_Predictie_Churn_Logistic.py          # Logistic Regression for churn prediction
+├── 6_📈_Regresie_Multipla_Statsmodels.py     # Statsmodels multiple regression analysis
+├── churn-bigml-80.csv                        # Train dataset file
+├── churn-bigml-20.csv                        # Test dataset file
+└── venv/                                     # Python virtual environment
+```
+
+### Pages
+
+#### Home (`Home.py`)
+- Project introduction and author credits.
+- Dataset source and business context regarding customer retention.
+
+#### Page 01 — Importul Datelor
+- Reads CSV files (handling the index explicitly with `index_col=0`).
+- Implements missing value treatment.
+- Scales and encodes categorical variables (like International Plan and Churn) to prepare them for machine learning.
+
+#### Page 02 — Analiza Exploratorie
+- Utilizes Streamlit widgets for interactive data filtering.
+- Demonstrates data extraction using `loc` and `iloc`.
+- Performs statistical processing, grouping, and aggregation utilizing pandas dataframes.
+
+#### Page 03 — Vizualizari
+- Generates dynamic charts using `matplotlib`, `seaborn`, and `plotly`.
+- Explores correlations between customer service calls, total charges, and the churn rate.
+
+#### Page 04 — Clusterizare
+- **K-Means clustering** built with `scikit-learn`.
+- Segments clients based on usage patterns to identify distinct user profiles for targeted retention strategies.
+
+#### Page 05 — Predictie Churn Logistic
+- Trains a **Logistic Regression** model using `scikit-learn`.
+- Predicts the likelihood of a customer leaving based on account features.
+- Displays specific metrics like accuracy, precision, and recall.
+
+#### Page 06 — Regresie Multipla Statsmodels
+- Trains a multiple regression model using `statsmodels`.
+- Analyzes the statistical significance (p-values) of different predictors on the total revenue/charge generated by a user.
+
+## Application 2 — SAS Exercises
+
+### Overview
+
+A SAS program (`proiect.sas`) that performs a structured analysis of the same dataset using Base SAS procedures. It covers all 10 required functionalities: importing data, formatting, conditional processing, subsetting, SAS functions, combining datasets via SQL and SET, utilizing arrays, reporting, statistical modeling, and graphing.
